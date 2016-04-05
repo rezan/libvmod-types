@@ -1,0 +1,28 @@
+varnishtest "Test types string vmod"
+
+server s1 {
+       rxreq
+       txresp
+} -start
+
+varnish v1 -vcl+backend {
+	import types from "${vmod_topbuild}/src/.libs/libvmod_types.so";
+
+	sub vcl_init {
+		new s = types.string("Hello!");
+	}
+
+	sub vcl_deliver {
+		set resp.http.s = s.value();
+		set resp.http.s_len = s.length() + 0;
+	}
+} -start
+
+client c1 {
+	txreq -url "/"
+	rxresp
+	expect resp.http.s == "Hello!"
+	expect resp.http.s_len == "6"
+}
+
+client c1 -run

@@ -1,0 +1,15 @@
+$Module types 3 Types VMOD
+
+Basic type objects
+
+$Object string(STRING s)
+
+Create a new string object with a value of s
+
+$Method STRING .value()
+
+Get the value of the string object
+
+$Method INT .length()
+
+Get the length of the string object
