@@ -1,0 +1,55 @@
+varnishtest "Test types integer vmod"
+
+server s1 {
+       rxreq
+       txresp
+       rxreq
+       txresp
+       rxreq
+       txresp
+} -start
+
+varnish v1 -vcl+backend {
+	import types from "${vmod_topbuild}/src/.libs/libvmod_types.so";
+	import std;
+
+	sub vcl_init {
+		new reqs = types.integer(0);
+		new counter = types.integer(0);
+	}
+
+	sub vcl_recv {
+		if (req.url == "/reset") {
+			reqs.set(0);
+			counter.set(0);
+		}
+
+		if (req.http.counter) {
+			counter.increment(std.integer(req.http.counter, 0));
+		}
+	}
+
+	sub vcl_deliver {
+		set resp.http.reqs = reqs.increment_get(1);
+		set resp.http.counter = counter.value();
+	}
+} -start
+
+client c1 {
+	txreq -url "/" -hdr "counter: 10"
+	rxresp
+	expect resp.http.reqs == "1"
+	expect resp.http.counter == "10"
+
+	txreq -url "/" -hdr "counter: -25"
+	rxresp
+	expect resp.http.reqs == "2"
+	expect resp.http.counter == "-15"
+
+	txreq -url "/reset" -hdr "counter: 3"
+	rxresp
+	expect resp.http.reqs == "1"
+	expect resp.http.counter == "3"
+}
+
+client c1 -run

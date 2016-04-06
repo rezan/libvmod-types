@@ -17,3 +17,23 @@ Get the string length
 $Method VOID .set(STRING s)
 
 Set a new string value
+
+$Object integer(INT i)
+
+Create a new integer object with a value of i
+
+$Method INT .value()
+
+Get the int value
+
+$Method VOID .set(INT i)
+
+Set a new integer value
+
+$Method VOID .increment(INT i)
+
+Increment the value by i
+
+$Method INT .increment_get(INT i)
+
+Increment the value by i, return the new value

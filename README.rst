@@ -84,7 +84,7 @@ Example
 Prototype
 	::
 
-		.set(String s)
+		.set(STRING s)
 Return value
 	VOID
 Description
@@ -94,6 +94,90 @@ Example
 
 		new str = types.string("This is a string!");
 		str.set("Here is a new value.");
+
+integer
+-------
+
+Prototype
+	::
+
+		integer(INT i)
+Return value
+	OBJECT
+Description
+	Creates a new integer object with value i.
+Example
+	::
+
+		new i = types.integer(0);
+
+(integer).value
+---------------
+
+Prototype
+	::
+
+		.value()
+Return value
+	INT
+Description
+	Gets the integer value.
+Example
+	::
+
+		new i = types.integer(12);
+		set resp.http.X-int = i.value();
+
+(integer).set
+-------------
+
+Prototype
+	::
+
+		.set(INT i)
+Return value
+	VOID
+Description
+	Sets the integer value.
+Example
+	::
+
+		new i = types.integer(12);
+		i.set(0);
+
+(integer).increment
+-------------------
+
+Prototype
+	::
+
+		.increment(INT i)
+Return value
+	VOID
+Description
+	Increment value by i.
+Example
+	::
+
+		new i = types.integer(0);
+		i.increment(1);
+
+(integer).increment_get
+-----------------------
+
+Prototype
+	::
+
+		.increment_get(INT i)
+Return value
+	INT
+Description
+	Increment value by i and return new value.
+Example
+	::
+
+		new i = types.integer(0);
+		set resp.http.X-int = i.increment_get(1);
 
 
 USAGE EXAMPLE
@@ -105,11 +189,17 @@ In your VCL you could then use this vmod along the following lines::
 
 	sub vcl_init {
 		new s = types.string("Hello!");
+		new reqs = types.integer(0);
+	}
+
+	sub vcl_recv {
+		reqs.increment(1);
 	}
 
 	sub vcl_deliver {
 		set resp.http.s = s.value();
 		set resp.http.s_len = s.length() + 0;
+		set resp.http.requests = reqs.value();
 	}
 
 

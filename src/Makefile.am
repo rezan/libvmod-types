@@ -6,7 +6,8 @@ vmod_LTLIBRARIES = libvmod_types.la
 libvmod_types_la_LDFLAGS = -module -export-dynamic -avoid-version -shared
 
 libvmod_types_la_SOURCES = \
-	vmod_types_string.c
+	vmod_types_string.c \
+	vmod_types_integer.c
 
 nodist_libvmod_types_la_SOURCES = \
 	vcc_if.c \
