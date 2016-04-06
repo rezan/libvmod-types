@@ -12,7 +12,7 @@ nodist_libvmod_types_la_SOURCES = \
 	vcc_if.c \
 	vcc_if.h
 
-vmod_types_string.lo: vcc_if.c vcc_if.h
+vmod_types_*.lo: vcc_if.c vcc_if.h
 
 vcc_if.c: vcc_if.h
 

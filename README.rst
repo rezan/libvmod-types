@@ -52,7 +52,7 @@ Prototype
 Return value
 	STRING
 Description
-	Gets the string value of a string object
+	Gets the string value.
 Example
 	::
 
@@ -69,7 +69,7 @@ Prototype
 Return value
 	INT
 Description
-	Gets the length of the string objects value
+	Gets the string length.
 Example
 	::
 
@@ -77,6 +77,23 @@ Example
 		if (str.length() == 17) {
 			//str has a length of 17
 		}
+
+(string).set
+------------
+
+Prototype
+	::
+
+		.set(String s)
+Return value
+	VOID
+Description
+	Sets the string value.
+Example
+	::
+
+		new str = types.string("This is a string!");
+		str.set("Here is a new value.");
 
 
 USAGE EXAMPLE

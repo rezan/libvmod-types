@@ -8,8 +8,12 @@ Create a new string object with a value of s
 
 $Method STRING .value()
 
-Get the value of the string object
+Get the string value
 
 $Method INT .length()
 
-Get the length of the string object
+Get the string length
+
+$Method VOID .set(STRING s)
+
+Set a new string value

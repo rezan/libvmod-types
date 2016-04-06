@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <pthread.h>
 
 #include "vcl.h"
 #include "vrt.h"
@@ -12,8 +13,9 @@ struct vmod_types_string {
 	unsigned			magic;
 #define VMOD_TYPES_STRING_MAGIC		0xB2045F8E
 
+	pthread_rwlock_t		rwlock;
+
 	char				*value;
-	char				*vcl_name;
 
 	size_t				length;
 };
@@ -36,8 +38,9 @@ vmod_string__init(VRT_CTX, struct vmod_types_string **object_p,
 	ALLOC_OBJ(object, VMOD_TYPES_STRING_MAGIC);
 	AN(object);
 
+	AZ(pthread_rwlock_init(&object->rwlock, NULL));
+
 	REPLACE(object->value, value);
-	REPLACE(object->vcl_name, vcl_name);
 
 	object->length = strlen(object->value);
 
@@ -50,8 +53,9 @@ vmod_string__fini(struct vmod_types_string **object_p)
 	AN(object_p);
 	CHECK_OBJ_NOTNULL(*object_p, VMOD_TYPES_STRING_MAGIC);
 
+	AZ(pthread_rwlock_destroy(&(*object_p)->rwlock));
+
 	free((*object_p)->value);
-	free((*object_p)->vcl_name);
 
 	FREE_OBJ(*object_p);
 }
@@ -65,6 +69,8 @@ vmod_string_value(VRT_CTX, struct vmod_types_string *object)
 	CHECK_OBJ_NOTNULL(ctx, VRT_CTX_MAGIC);
 	CHECK_OBJ_NOTNULL(object, VMOD_TYPES_STRING_MAGIC);
 
+	AZ(pthread_rwlock_rdlock(&object->rwlock));
+
 	available = WS_Reserve(ctx->ws, 0);
 	value = ctx->ws->f;
 
@@ -77,14 +83,38 @@ vmod_string_value(VRT_CTX, struct vmod_types_string *object)
 
 	WS_Release(ctx->ws, object->length + 1);
 
-	return(value);
+	AZ(pthread_rwlock_unlock(&object->rwlock));
+
+	return (value);
 }
 
 VCL_INT
 vmod_string_length(VRT_CTX, struct vmod_types_string *object)
 {
+	long ret;
 	CHECK_OBJ_NOTNULL(ctx, VRT_CTX_MAGIC);
 	CHECK_OBJ_NOTNULL(object, VMOD_TYPES_STRING_MAGIC);
 
-	return((long)object->length);
+	AZ(pthread_rwlock_rdlock(&object->rwlock));
+
+	ret = (long)object->length;
+
+	AZ(pthread_rwlock_unlock(&object->rwlock));
+
+	return (ret);
+}
+
+VCL_VOID
+vmod_string_set(VRT_CTX, struct vmod_types_string *object, VCL_STRING value)
+{
+	CHECK_OBJ_NOTNULL(ctx, VRT_CTX_MAGIC);
+	CHECK_OBJ_NOTNULL(object, VMOD_TYPES_STRING_MAGIC);
+
+	AZ(pthread_rwlock_wrlock(&object->rwlock));
+
+	REPLACE(object->value, value);
+
+	object->length = strlen(object->value);
+
+	AZ(pthread_rwlock_unlock(&object->rwlock));
 }
