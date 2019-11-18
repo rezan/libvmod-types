@@ -10,7 +10,7 @@ server s1 {
 } -start
 
 varnish v1 -vcl+backend {
-	import types from "${vmod_topbuild}/src/.libs/libvmod_types.so";
+	import ${vmod_types};
 	import std;
 
 	sub vcl_init {

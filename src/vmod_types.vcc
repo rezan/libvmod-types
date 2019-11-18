@@ -1,3 +1,7 @@
+#
+# VMOD TYPES
+#
+
 $Module types 3 Types VMOD
 
 Basic type objects

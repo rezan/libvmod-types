@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <pthread.h>
 
-#include "vcl.h"
-#include "vrt.h"
 #include "cache/cache.h"
+#include "vcl.h"
 
-#include "vcc_if.h"
+#include "vcc_types_if.h"
 
 
 struct vmod_types_integer {

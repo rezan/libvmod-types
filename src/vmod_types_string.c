@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <pthread.h>
 
-#include "vcl.h"
-#include "vrt.h"
 #include "cache/cache.h"
+#include "vcl.h"
 
-#include "vcc_if.h"
+#include "vcc_types_if.h"
 
 
 struct vmod_types_string {
@@ -71,7 +71,7 @@ vmod_string_value(VRT_CTX, struct vmod_types_string *object)
 
 	AZ(pthread_rwlock_rdlock(&object->rwlock));
 
-	available = WS_Reserve(ctx->ws, 0);
+	available = WS_ReserveAll(ctx->ws);
 	value = ctx->ws->f;
 
 	if (available < object->length + 1) {
