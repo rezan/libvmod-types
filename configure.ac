@@ -13,12 +13,6 @@ AM_PROG_AR
 LT_PREREQ([2.2.6])
 LT_INIT([dlopen disable-static])
 
-AX_PTHREAD(,[AC_MSG_ERROR([Could not configure pthreads support])])
-
-LIBS="$PTHREAD_LIBS $LIBS"
-CFLAGS="$CFLAGS $PTHREAD_CFLAGS"
-CC="$PTHREAD_CC"
-
 AC_ARG_WITH([rst2man],
 	AS_HELP_STRING(
 		[--with-rst2man=PATH],

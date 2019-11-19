@@ -7,38 +7,38 @@ $ABI vrt
 
 Basic type objects
 
+
+
 $Object REQUEST_SCOPE string(STRING s)
 
-Create a new string object with a value of s
+    Create a new string object with a value of s
 
 $Method STRING .value()
 
-Get the string value
+    Get the string value
 
 $Method INT .length()
 
-Get the string length
+    Get the string length
 
 $Method VOID .set(STRING s)
 
-Set a new string value
+    Set a new string value
+
+
 
 $Object REQUEST_SCOPE integer(INT i)
 
-Create a new integer object with a value of i
+    Create a new integer object with a value of i
 
 $Method INT .value()
 
-Get the int value
+    Get the int value
 
 $Method VOID .set(INT i)
 
-Set a new integer value
+    Set a new integer value
 
-$Method VOID .increment(INT i)
+$Method INT .increment(INT i)
 
-Increment the value by i
-
-$Method INT .increment_get(INT i)
-
-Increment the value by i, return the new value
+    Increment the value by i, return the new value

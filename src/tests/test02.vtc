@@ -14,14 +14,15 @@ varnish v1 -vcl+backend {
 	import std;
 
 	sub vcl_init {
-		new reqs = types.integer(0);
-		new counter = types.integer(0);
 	}
 
 	sub vcl_recv {
+		new reqs = types.integer(0);
+		new counter = types.integer(0);
+
 		if (req.url == "/reset") {
-			reqs.set(0);
-			counter.set(0);
+			reqs.set(100);
+			counter.set(100);
 		}
 
 		if (req.http.counter) {
@@ -30,7 +31,7 @@ varnish v1 -vcl+backend {
 	}
 
 	sub vcl_deliver {
-		set resp.http.reqs = reqs.increment_get(1);
+		set resp.http.reqs = reqs.increment(1);
 		set resp.http.counter = counter.value();
 	}
 } -start
@@ -43,13 +44,11 @@ client c1 {
 
 	txreq -url "/" -hdr "counter: -25"
 	rxresp
-	expect resp.http.reqs == "2"
-	expect resp.http.counter == "-15"
+	expect resp.http.reqs == "1"
+	expect resp.http.counter == "-25"
 
 	txreq -url "/reset" -hdr "counter: 3"
 	rxresp
-	expect resp.http.reqs == "1"
-	expect resp.http.counter == "3"
-}
-
-client c1 -run
+	expect resp.http.reqs == "101"
+	expect resp.http.counter == "103"
+} -run

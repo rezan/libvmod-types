@@ -10,11 +10,9 @@ server s1 {
 varnish v1 -vcl+backend {
 	import ${vmod_types};
 
-	sub vcl_init {
-		new s = types.string("Hello!");
-	}
-
 	sub vcl_recv {
+		new s = types.string("Hello!");
+
 		if (req.url == "/bye") {
 			s.set("Bye!");
 		}
@@ -22,7 +20,7 @@ varnish v1 -vcl+backend {
 
 	sub vcl_deliver {
 		set resp.http.s = s.value();
-		set resp.http.s_len = s.length() + 0;
+		set resp.http.s_len = s.length();
 	}
 } -start
 
@@ -36,6 +34,4 @@ client c1 {
 	rxresp
 	expect resp.http.s == "Bye!"
 	expect resp.http.s_len == "4"
-}
-
-client c1 -run
+} -run
