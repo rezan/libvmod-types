@@ -3,10 +3,11 @@
 #
 
 $Module types 3 Types VMOD
+$ABI vrt
 
 Basic type objects
 
-$Object string(STRING s)
+$Object REQUEST_SCOPE string(STRING s)
 
 Create a new string object with a value of s
 
@@ -22,7 +23,7 @@ $Method VOID .set(STRING s)
 
 Set a new string value
 
-$Object integer(INT i)
+$Object REQUEST_SCOPE integer(INT i)
 
 Create a new integer object with a value of i
 
