@@ -27,7 +27,6 @@ vmod_integer__init(VRT_CTX, struct vmod_types_integer **object_p,
 	AN(vcl_name);
 
 	object = WS_Alloc(ctx->ws, sizeof(struct vmod_types_integer));
-
 	if (!object) {
 		VRT_fail(ctx, "Out of workspace");
                 return;
