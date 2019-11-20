@@ -31,9 +31,14 @@ vmod_string__init(VRT_CTX, struct vmod_types_string **object_p,
 		value = "";
 	}
 
-	ALLOC_OBJ(object, VMOD_TYPES_STRING_MAGIC);
-	AN(object);
+	object = WS_Alloc(ctx->ws, sizeof(struct vmod_types_string));
 
+	if (!object) {
+		VRT_fail(ctx, "Out of workspace");
+                return;
+	}
+
+	INIT_OBJ(object, VMOD_TYPES_STRING_MAGIC);
 	object->value = value;
 	object->length = strlen(object->value);
 
@@ -46,7 +51,7 @@ vmod_string__fini(struct vmod_types_string **object_p)
 	AN(object_p);
 	CHECK_OBJ_NOTNULL(*object_p, VMOD_TYPES_STRING_MAGIC);
 
-	FREE_OBJ(*object_p);
+	INIT_OBJ(*object_p, 0);
 }
 
 VCL_STRING
@@ -72,6 +77,10 @@ vmod_string_set(VRT_CTX, struct vmod_types_string *object, VCL_STRING value)
 {
 	CHECK_OBJ_NOTNULL(ctx, VRT_CTX_MAGIC);
 	CHECK_OBJ_NOTNULL(object, VMOD_TYPES_STRING_MAGIC);
+
+	if (!value) {
+		value = "";
+	}
 
 	object->value = value;
 	object->length = strlen(object->value);

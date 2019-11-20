@@ -26,9 +26,14 @@ vmod_integer__init(VRT_CTX, struct vmod_types_integer **object_p,
 	AZ(*object_p);
 	AN(vcl_name);
 
-	ALLOC_OBJ(object, VMOD_TYPES_INTEGER_MAGIC);
-	AN(object);
+	object = WS_Alloc(ctx->ws, sizeof(struct vmod_types_integer));
 
+	if (!object) {
+		VRT_fail(ctx, "Out of workspace");
+                return;
+	}
+
+	INIT_OBJ(object, VMOD_TYPES_INTEGER_MAGIC);
 	object->value = value;
 
 	*object_p = object;
@@ -40,7 +45,7 @@ vmod_integer__fini(struct vmod_types_integer **object_p)
 	AN(object_p);
 	CHECK_OBJ_NOTNULL(*object_p, VMOD_TYPES_INTEGER_MAGIC);
 
-	FREE_OBJ(*object_p);
+	INIT_OBJ(*object_p, 0);
 }
 
 VCL_INT
