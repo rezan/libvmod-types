@@ -23,7 +23,6 @@ vmod_integer__init(VRT_CTX, struct vmod_types_integer **object_p,
 
 	CHECK_OBJ_NOTNULL(ctx, VRT_CTX_MAGIC);
 	AN(object_p);
-	AZ(*object_p);
 	AN(vcl_name);
 
 	object = WS_Alloc(ctx->ws, sizeof(struct vmod_types_integer));

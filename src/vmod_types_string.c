@@ -24,7 +24,6 @@ vmod_string__init(VRT_CTX, struct vmod_types_string **object_p,
 
 	CHECK_OBJ_NOTNULL(ctx, VRT_CTX_MAGIC);
 	AN(object_p);
-	AZ(*object_p);
 	AN(vcl_name);
 
 	if (!value) {
